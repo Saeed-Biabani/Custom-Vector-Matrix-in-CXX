@@ -65,7 +65,7 @@ class Vector {
                 cout << *item<<' ';
                 item++;
             }
-            cout<<"]"<endl;
+            cout<<"]"<<endl;
         }
 };
 
