@@ -38,9 +38,12 @@ class Vector {
         constexpr auto Max() const noexcept;
         constexpr auto Min() const noexcept;
 
+	    constexpr auto Argmax() const noexcept;
+
         static auto ZeroInit(size_type) noexcept;
         static auto OneInit(size_type) noexcept;
         static auto RandomInit(size_type) noexcept;
+        static auto RangeInit(_T __start, _T __end, _T __step = 1) noexcept;
 
         auto Batch(size_type) noexcept;
 
@@ -62,7 +65,7 @@ class Vector {
                 cout << *item<<' ';
                 item++;
             }
-            cout<<"]";
+            cout<<"]"<endl;
         }
 };
 
@@ -155,6 +158,23 @@ constexpr auto Vector<_T>::Min() const noexcept {
 
 
 template<class _T>
+constexpr auto Vector<_T>::Argmax() const noexcept {
+	_T max = *this->_vec;
+	const _T *current = this->_vec;
+	size_type indx = 0;
+
+	for (int i = 0; i < this->vec_size; i++) {
+		if (*current > max) {
+			max = *current;
+			indx = i;
+		}
+		current++;
+	}
+	return indx;
+}
+
+
+template<class _T>
 auto Vector<_T>::ZeroInit(size_type __l) noexcept {
     _T *v = new _T[__l];
 
@@ -188,6 +208,18 @@ auto Vector<_T>::RandomInit(size_type __l) noexcept {
         v[i] = distribution(engine);
     }
     return Vector(v, __l);
+}
+
+template<class _T>
+auto Vector<_T>::RangeInit(_T __start, _T __end, _T __step) noexcept {
+	size_type __l = int(((__end - __start) / __step)+0.9999);
+    	_T *v = new _T[__l];
+
+	for (size_type i = 0; i <= __l; i++) {
+		v[i] = __start;
+		__start += __step;
+	}
+	return Vector(v, __l);
 }
 
 
